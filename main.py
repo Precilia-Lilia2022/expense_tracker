@@ -2,9 +2,7 @@ import pandas as pd
 import csv
 from datetime import datetime
 from data_entry import get_date, get_ampount, get_category, get_description
-
-
-
+import matplotlib.pyplot as plt
 class CSV:
     CSV_FILE = "finance_data.csv"
     COLUMNS = ["date","amount","category", "description"]
@@ -50,8 +48,8 @@ class CSV:
                 index=False, formatters={'date': lambda x: x.strftime(CSV.date_format)}
             ))
             
-            total_income = filtered_df["category"] == "Income"["amount"].sum()
-            total_expense = filtered_df["category"] == "Expense"["amount"].sum()
+            total_income = filtered_df[filtered_df["category"] == "Income"]["amount"].sum()
+            total_expense = filtered_df[filtered_df["category"] == "Expense"]["amount"].sum()
             
             print("\nSummary:") 
             print(f"Total Income: {total_income:.2f}")
@@ -67,11 +65,46 @@ def add():
     category = get_category()
     description = get_description()
     CSV.add_entry(date, amount, category, description)   
+  
+def plot_transactions(df):  
+    df.set_index('date', inplace=True)
+    income_df = df[df['category'] == 'Income'].resample('D').sum().reindex(df.index, fill_value=0)
+    expense_df = df[df['category'] == 'Expense'].resample('D').sum().reindex(df.index, fill_value=0)
     
-
-CSV.get_transactions("01-01-2024", "30-11-2025")
-add()       
-# CSV.initialize_csv() 
-# CSV.add_entry(datetime.now().strftime("%Y-%m-%d"), 100.0, "Groceries", "Bought groceries at the supermarket")
+    plt.figure(figsize=(10, 5))
+    plt.plot(income_df.index, income_df['amount'], label='Income', color='green')
+    plt.plot(expense_df.index, expense_df['amount'], label='Expense', color='red')
+    plt.xlabel('Date')
+    plt.ylabel('Amount')
+    plt.title('Income and Expense Over Time')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
     
-            
+def main():
+    while True:
+        print("\nExpense Tracker Menu:")
+        print("1. Add a new transaction")
+        print("2. View transactions summary")
+        print("3. Exit")
+        
+        choice = input("Select an option (1-3): ")
+        
+        if choice == '1':
+            add()
+        elif choice == '2':
+            start_date = get_date("Enter the start date (DD-MM-YYYY): ")
+            end_date = get_date("Enter the end date (DD-MM-YYYY): ")
+            CSV.get_transactions(start_date, end_date)
+            if input("Do you want to plot the transactions? (y/n): ").lower() == 'y':
+                df = CSV.get_transactions(start_date, end_date)
+                if not df.empty:
+                    plot_transactions(df)
+        elif choice == '3':
+            print("Exiting ......")
+            break
+        else:
+            print("Invalid choice. Please select a valid option.")
+ 
+if __name__ == "__main__":
+    main()

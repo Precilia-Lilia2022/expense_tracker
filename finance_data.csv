@@ -1,2 +1,19 @@
 date,amount,category,description
 25-11-2025,300.0,Income,remote_job
+25-11-2025,400.0,Expense,groceries
+02-12-2024,500.0,Income,vacancie_job
+25-11-2025,2000.0,Income,salary
+20-11-2025,1200.0,Expense,travel
+20-07-2025,130,Expense,Transport
+21-07-2025,600,Income,Bonus
+22-07-2025,35,Expense,Snacks
+23-07-2025,300,Income,Stock Dividends
+24-07-2025,100,Expense,Entertainment
+25-07-2025,55,Expense,Coffee
+26-07-2025,140,Expense,Gas
+27-07-2025,90,Expense,Books
+28-07-2025,170,Expense,Clothing
+29-07-2025,1200,Income,Salary
+30-07-2025,45,Expense,Stationery
+31-07-2025,190,Expense,Utilities
+20-07-2025,124.0,Expense,Groceries
